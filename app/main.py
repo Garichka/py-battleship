@@ -36,10 +36,14 @@ class Ship:
 class Battleship:
     def __init__(self, ships: list) -> None:
         self.field = {}
+        self.ships_instances = []
         for start, end in ships:
             new_ship = Ship(start, end)
+            self.ships_instances.append(new_ship)
             for deck in new_ship.decks:
                 self.field[(deck.row, deck.column)] = new_ship
+
+        self._validate_field()
 
     def fire(self, location: tuple) -> str:
         if location in self.field:
@@ -48,7 +52,20 @@ class Battleship:
         return "Miss!"
 
     def _validate_field(self) -> None:
-        pass
+        if len(self.ships_instances) != 10:
+            raise ValueError("There must be exactly 10 ships")
+
+        sizes = [len(ship.decks) for ship in self.ships_instances]
+        if sorted(sizes) != [1, 1, 1, 1, 2, 2, 2, 3, 3, 4]:
+            raise ValueError("Invalid ship sizes distribution")
+
+        for ship in self.ships_instances:
+            for deck in ship.decks:
+                for r_offset in range(-1, 2):
+                    for c_offset in range(-1, 2):
+                        neighbor = (deck.row + r_offset, deck.column + c_offset)
+                        if neighbor in self.field and self.field[neighbor] is not ship:
+                            raise ValueError("Ships are too close to each other")
 
     def print_field(self) -> None:
         for r in range(10):
@@ -57,7 +74,10 @@ class Battleship:
                 if (r, c) in self.field:
                     ship = self.field[(r, c)]
                     deck = ship.get_deck(r, c)
-                    row_str += "□ " if deck.is_alive else "X "
+                    if deck.is_alive:
+                        row_str += "□ "
+                    else:
+                        row_str += "x " if ship.is_drowned else "* "
                 else:
                     row_str += ". "
             print(row_str.strip())

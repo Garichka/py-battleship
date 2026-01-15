@@ -11,11 +11,12 @@ class Ship:
         self.decks = []
         start_row, start_col = start
         end_row, end_col = end
+
         for r in range(min(start_row, end_row), max(start_row, end_row) + 1):
             for c in range(min(start_col, end_col), max(start_col, end_col) + 1):
                 self.decks.append(Deck(r, c))
 
-    def get_deck(self, row: int, column: int) -> str | None:
+    def get_deck(self, row: int, column: int) -> "Deck | None":
         for deck in self.decks:
             if deck.row == row and deck.column == column:
                 return deck
@@ -45,3 +46,18 @@ class Battleship:
             ship = self.field[location]
             return ship.fire(location[0], location[1])
         return "Miss!"
+
+    def _validate_field(self) -> None:
+        pass
+
+    def print_field(self) -> None:
+        for r in range(10):
+            row_str = ""
+            for c in range(10):
+                if (r, c) in self.field:
+                    ship = self.field[(r, c)]
+                    deck = ship.get_deck(r, c)
+                    row_str += "□ " if deck.is_alive else "X "
+                else:
+                    row_str += ". "
+            print(row_str.strip())

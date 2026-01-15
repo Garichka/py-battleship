@@ -21,7 +21,7 @@ class Ship:
                 return deck
         return None
 
-    def fire(self, row: int, column: int) -> str:
+    def fire(self, row: int, column: int) -> None:
         deck = self.get_deck(row, column)
         if deck:
             deck.is_alive = False

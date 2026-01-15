@@ -15,13 +15,13 @@ class Ship:
             for c in range(min(start_col, end_col), max(start_col, end_col) + 1):
                 self.decks.append(Deck(r, c))
 
-    def get_deck(self, row: int, column: int) -> None:
+    def get_deck(self, row: int, column: int) -> str | None:
         for deck in self.decks:
             if deck.row == row and deck.column == column:
                 return deck
         return None
 
-    def fire(self, row: int, column: int) -> None:
+    def fire(self, row: int, column: int) -> str:
         deck = self.get_deck(row, column)
         if deck:
             deck.is_alive = False

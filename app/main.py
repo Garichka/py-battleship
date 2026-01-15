@@ -9,10 +9,8 @@ class Ship:
     def __init__(self, start: tuple, end: tuple, is_drowned: bool = False) -> None:
         self.is_drowned = is_drowned
         self.decks = []
-
         start_row, start_col = start
         end_row, end_col = end
-
         for r in range(min(start_row, end_row), max(start_row, end_row) + 1):
             for c in range(min(start_col, end_col), max(start_col, end_col) + 1):
                 self.decks.append(Deck(r, c))
